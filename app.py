@@ -4,99 +4,184 @@ from sklearn.metrics.pairwise import cosine_similarity
 import PyPDF2
 import docx
 import re
+from openai import OpenAI
 
-st.set_page_config(page_title="PrepGenius", page_icon="🚀", layout="wide")
 
-# ------------------ FUNCTIONS ------------------
+st.set_page_config(
+    page_title="PrepGenius AI",
+    page_icon="🚀",
+    layout="wide"
+)
 
-def extract_text_from_pdf(file):
+
+st.markdown("""
+<style>
+body {
+    background-color: #0e1117;
+}
+.block-container {
+    padding-top: 2rem;
+}
+h1, h2, h3 {
+    color: white;
+}
+.stTextArea textarea {
+    background-color: #1c1f26 !important;
+    color: white !important;
+}
+.stButton>button {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    height: 3em;
+    width: 100%;
+}
+.metric-box {
+    background: #1c1f26;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+def extract_pdf(file):
     reader = PyPDF2.PdfReader(file)
     text = ""
     for page in reader.pages:
-        text += page.extract_text()
+        content = page.extract_text()
+        if content:
+            text += content
     return text
 
-def extract_text_from_docx(file):
-    doc = docx.Document(file)
+
+def extract_docx(file):
+    document = docx.Document(file)
     text = ""
-    for para in doc.paragraphs:
-        text += para.text
+    for para in document.paragraphs:
+        text += para.text + " "
     return text
 
-def clean_text(text):
-    text = re.sub(r'\W+', ' ', text)
-    return text.lower()
 
-def calculate_similarity(resume, job_desc):
-    vectorizer = CountVectorizer().fit_transform([resume, job_desc])
-    similarity = cosine_similarity(vectorizer)[0][1]
-    return round(similarity * 100, 2)
+def normalize(text):
+    return re.sub(r"\W+", " ", text.lower())
 
-# ------------------ UI ------------------
 
-st.title("🚀 PrepGenius – AI Interview Toolkit")
-st.markdown("### Smart Resume Analysis & Skill Gap Detection")
+def compute_similarity(resume_text, jd_text):
+    vectorizer = CountVectorizer().fit_transform([resume_text, jd_text])
+    score = cosine_similarity(vectorizer)[0][1]
+    return round(score * 100, 2)
+
+
+def generate_ai_feedback(resume_text, jd_text):
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+    prompt = f"""
+You are a senior technical recruiter and resume optimization specialist.
+
+Job Description:
+{jd_text}
+
+Candidate Resume:
+{resume_text}
+
+Provide structured feedback in clear sections:
+
+1. Missing technical skills relevant to this role
+2. Three rewritten resume bullet points aligned with the job
+3. A refined professional summary tailored to this position
+4. Suggestions to quantify achievements
+5. ATS optimization improvements
+
+Be specific, role-aligned, and professional.
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3
+    )
+
+    return response.choices[0].message.content
+
+
+st.title("PrepGenius – AI Resume Intelligence Suite")
+st.markdown("Advanced Resume Analysis • Skill Gap Detection • AI Optimization")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("📄 Upload Resume")
+    st.subheader("Resume")
     uploaded_file = st.file_uploader("Upload PDF or DOCX", type=["pdf", "docx"])
-    
     resume_text = ""
-    
+
     if uploaded_file:
         if uploaded_file.type == "application/pdf":
-            resume_text = extract_text_from_pdf(uploaded_file)
-        elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            resume_text = extract_text_from_docx(uploaded_file)
+            resume_text = extract_pdf(uploaded_file)
+        else:
+            resume_text = extract_docx(uploaded_file)
 
-    resume_manual = st.text_area("Or Paste Resume Text")
+    manual_resume = st.text_area("Or paste resume content")
 
-    if resume_manual:
-        resume_text = resume_manual
+    if manual_resume:
+        resume_text = manual_resume
+
 
 with col2:
-    st.subheader("📌 Job Description")
-    job_desc = st.text_area("Paste Job Description")
+    st.subheader("Job Description")
+    job_description = st.text_area("Paste job description")
 
-# ------------------ ANALYSIS ------------------
 
-if st.button("🔍 Analyze Resume"):
-    
-    if resume_text and job_desc:
-        resume_clean = clean_text(resume_text)
-        job_clean = clean_text(job_desc)
+if st.button("Run Analysis"):
 
-        score = calculate_similarity(resume_clean, job_clean)
+    if not resume_text or not job_description:
+        st.warning("Please provide both resume and job description.")
+        st.stop()
 
-        st.markdown("## 📊 Match Analysis")
-        st.progress(int(score))
+    cleaned_resume = normalize(resume_text)
+    cleaned_jd = normalize(job_description)
 
-        if score > 70:
-            st.success(f"Excellent Match: {score}% 🎯")
-        elif score > 40:
-            st.warning(f"Moderate Match: {score}% ⚡")
-        else:
-            st.error(f"Low Match: {score}% ❌")
+    score = compute_similarity(cleaned_resume, cleaned_jd)
 
-        # Skill Gap Detection
-        job_words = set(job_clean.split())
-        resume_words = set(resume_clean.split())
-        missing_skills = job_words - resume_words
+    st.markdown("## Match Score")
+    st.progress(int(score))
 
-        st.markdown("## 🧠 Missing Skills (Based on JD)")
-        if missing_skills:
-            st.write(list(missing_skills)[:10])
-        else:
-            st.success("No major missing keywords detected!")
+    col_a, col_b, col_c = st.columns(3)
 
-        # Suggestions
-        st.markdown("## 💡 Suggestions to Improve")
-        st.write("• Add more project-specific keywords from the job description.")
-        st.write("• Include measurable achievements (e.g., improved model accuracy by 15%).")
-        st.write("• Highlight relevant tools & technologies.")
-        st.write("• Customize resume summary for this role.")
+    job_words = set(cleaned_jd.split())
+    resume_words = set(cleaned_resume.split())
+    missing_keywords = list(job_words - resume_words)[:15]
+    matching_keywords = len(resume_words.intersection(job_words))
 
+    with col_a:
+        st.markdown(
+            f"<div class='metric-box'><h2>{score}%</h2><p>Overall Match</p></div>",
+            unsafe_allow_html=True
+        )
+
+    with col_b:
+        st.markdown(
+            f"<div class='metric-box'><h2>{len(missing_keywords)}</h2><p>Missing Keywords</p></div>",
+            unsafe_allow_html=True
+        )
+
+    with col_c:
+        st.markdown(
+            f"<div class='metric-box'><h2>{matching_keywords}</h2><p>Matching Keywords</p></div>",
+            unsafe_allow_html=True
+        )
+
+    st.markdown("## Identified Skill Gaps")
+    if missing_keywords:
+        st.write(missing_keywords)
     else:
-        st.warning("Please upload/paste resume and job description.")
+        st.success("No major keyword gaps detected.")
+
+    st.markdown("## AI Optimization Feedback")
+
+    if st.button("Generate AI Suggestions"):
+        with st.spinner("Generating detailed feedback..."):
+            feedback = generate_ai_feedback(resume_text, job_description)
+            st.markdown(feedback)
