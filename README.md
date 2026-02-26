@@ -1,68 +1,86 @@
-🚀 PrepGenius – AI Resume Intelligence Suite
+# PrepGenius  
+### AI Resume Intelligence Suite
 
-PrepGenius is an AI-powered resume intelligence platform that evaluates resume-job alignment, detects skill gaps, and generates role-specific optimization feedback using NLP and GPT-based analysis.
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![Streamlit](https://img.shields.io/badge/Built%20With-Streamlit-red)
+![NLP](https://img.shields.io/badge/Domain-NLP-green)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-It combines keyword similarity scoring, structured skill comparison, and AI-driven resume rewriting to help candidates tailor their applications for specific roles.
+---
 
-✨ Core Features
-🔍 Resume–Job Match Analysis
+## Overview
 
-Cosine similarity scoring using vectorized text
+PrepGenius is an AI-powered resume intelligence platform designed to evaluate resume–job alignment, detect technical skill gaps, and generate role-specific optimization feedback using NLP and GPT-based analysis.
 
-Keyword overlap detection
+It combines traditional keyword similarity scoring with AI-driven refinement to help candidates tailor their resumes for specific job descriptions.
 
-Match percentage with visual indicators
+---
 
-🧠 Skill Gap Detection
+## Core Capabilities
 
-Identifies missing keywords from job description
+### 1. Resume–Job Match Analysis
 
-Displays matching vs missing technical terms
+- Cosine similarity scoring using vectorized text
+- Keyword overlap detection
+- Match percentage with visual indicators
 
-Highlights resume alignment strength
+### 2. Skill Gap Detection
 
-🤖 AI-Powered Resume Optimization
+- Identifies missing technical keywords
+- Displays matching vs missing terms
+- Highlights resume alignment strength
 
-Role-specific missing skill recommendations
+### 3. AI Resume Optimization
 
-Tailored resume bullet rewriting
+- Role-specific missing skill recommendations
+- Resume bullet rewriting aligned to job description
+- Professional summary refinement
+- Achievement quantification suggestions
+- ATS keyword optimization improvements
 
-Professional summary refinement
+### 4. Flexible Input Support
 
-Achievement quantification suggestions
+- Upload PDF resumes
+- Upload DOCX resumes
+- Manual text input
 
-ATS keyword optimization guidance
+---
 
-📂 Flexible Resume Input
+## System Architecture
 
-Upload PDF
 
-Upload DOCX
+User Input (PDF/DOCX/Text)
+↓
+Text Extraction
+↓
+Text Normalization
+↓
+Vectorization (CountVectorizer)
+↓
+Cosine Similarity Scoring
+↓
+Keyword Gap Detection
+↓
+GPT-Based Optimization Feedback
 
-Paste resume content manually
 
-🛠 Technology Stack
+---
 
-Python
+## Technology Stack
 
-Streamlit
+- Python
+- Streamlit
+- Scikit-learn
+- PyPDF2
+- python-docx
+- OpenAI API
 
-Scikit-learn
+---
 
-PyPDF2
+## Installation
 
-python-docx
+Clone the repository:
 
-OpenAI API
-
-🧠 How It Works
-
-Resume and job description text are normalized.
-
-Text is vectorized using CountVectorizer.
-
-Cosine similarity is calculated to determine match score.
-
-Keyword comparison identifies missing and matching terms.
-
-GPT-based analysis generates structured resume improvement feedback.
+```bash
+git clone https://github.com/SubiSamayasundaram/PrepGenius.git
+cd PrepGenius
