@@ -1,26 +1,68 @@
-# PrepGenius – AI Interview Toolkit
+🚀 PrepGenius – AI Resume Intelligence Suite
 
-PrepGenius is an AI-powered interview preparation assistant that helps students:
+PrepGenius is an AI-powered resume intelligence platform that evaluates resume-job alignment, detects skill gaps, and generates role-specific optimization feedback using NLP and GPT-based analysis.
 
-✅ Analyze Resume vs Job Description  
-✅ Generate Mock Interview Questions  
-✅ Prepare Company-Specific Questions  
-✅ Improve ATS Score  
+It combines keyword similarity scoring, structured skill comparison, and AI-driven resume rewriting to help candidates tailor their applications for specific roles.
 
----
-## Features
-- Resume Match Scoring
-- AI Question Generator
-- Clean UI (Streamlit)
-- Lightweight & Fast
----
-## 🛠 Tech Stack
-- Python
-- Streamlit
-- Scikit-learn
-- NLP
----
-## How to Run
-```bash
-pip install -r requirements.txt
-streamlit run app.py
+✨ Core Features
+🔍 Resume–Job Match Analysis
+
+Cosine similarity scoring using vectorized text
+
+Keyword overlap detection
+
+Match percentage with visual indicators
+
+🧠 Skill Gap Detection
+
+Identifies missing keywords from job description
+
+Displays matching vs missing technical terms
+
+Highlights resume alignment strength
+
+🤖 AI-Powered Resume Optimization
+
+Role-specific missing skill recommendations
+
+Tailored resume bullet rewriting
+
+Professional summary refinement
+
+Achievement quantification suggestions
+
+ATS keyword optimization guidance
+
+📂 Flexible Resume Input
+
+Upload PDF
+
+Upload DOCX
+
+Paste resume content manually
+
+🛠 Technology Stack
+
+Python
+
+Streamlit
+
+Scikit-learn
+
+PyPDF2
+
+python-docx
+
+OpenAI API
+
+🧠 How It Works
+
+Resume and job description text are normalized.
+
+Text is vectorized using CountVectorizer.
+
+Cosine similarity is calculated to determine match score.
+
+Keyword comparison identifies missing and matching terms.
+
+GPT-based analysis generates structured resume improvement feedback.
