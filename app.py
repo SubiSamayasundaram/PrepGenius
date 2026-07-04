@@ -4,6 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import PyPDF2
 import docx
 import re
+from io import BytesIO
 from openai import OpenAI
 from semantic_matcher import SemanticMatcher
 
@@ -105,6 +106,50 @@ def extract_skills(text):
         if skill in text_lower:
             found.append(skill)
     return set(found)
+
+
+def build_feedback_docx(feedback_text, score, semantic_score):
+    """
+    Converts the AI-generated feedback (markdown-ish text with **bold** and
+    numbered sections) into a downloadable Word document.
+    """
+    doc = docx.Document()
+
+    title = doc.add_heading("PrepGenius — AI Resume Feedback", level=0)
+
+    doc.add_paragraph(f"Keyword Match Score: {score}%    |    Semantic Match Score: {semantic_score}%")
+    doc.add_paragraph("")  # spacer
+
+    # Split into lines and handle basic markdown: **bold** segments and
+    # numbered section headers (e.g. "1. Technical alignment assessment")
+    bold_pattern = re.compile(r"\*\*(.+?)\*\*")
+
+    for raw_line in feedback_text.split("\n"):
+        line = raw_line.strip()
+        if not line:
+            doc.add_paragraph("")
+            continue
+
+        # Treat short numbered lines as section headings (e.g. "1. Missing skills")
+        if re.match(r"^\d+\.\s+\S", line) and len(line) < 80:
+            doc.add_heading(re.sub(r"^\d+\.\s+", "", line), level=2)
+            continue
+
+        para = doc.add_paragraph()
+        last_end = 0
+        for match in bold_pattern.finditer(line):
+            if match.start() > last_end:
+                para.add_run(line[last_end:match.start()])
+            bold_run = para.add_run(match.group(1))
+            bold_run.bold = True
+            last_end = match.end()
+        if last_end < len(line):
+            para.add_run(line[last_end:])
+
+    buffer = BytesIO()
+    doc.save(buffer)
+    buffer.seek(0)
+    return buffer
 
 
 def generate_ai_feedback(resume_text, jd_text, score, semantic_score=None, semantic_gaps=None, backend="Ollama (local)", ollama_model="llama3.2", groq_model="llama-3.1-8b-instant"):
@@ -367,3 +412,15 @@ if "analysis" in st.session_state:
 
     if "feedback" in st.session_state:
         st.markdown(st.session_state["feedback"])
+
+        doc_buffer = build_feedback_docx(
+            st.session_state["feedback"],
+            score,
+            semantic_score
+        )
+        st.download_button(
+            label="Download Feedback as Word Doc",
+            data=doc_buffer,
+            file_name="PrepGenius_Feedback.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
