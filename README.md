@@ -191,31 +191,6 @@ streamlit run app.py
 
 ---
 
-## Future Enhancements
-
-- Weighted hybrid lexical and semantic scoring
-- Named Entity Recognition for structured skill extraction
-- Resume section-level analysis
-- Experience relevance scoring
-- Advanced ATS compatibility analysis
-- Multi-job description comparison
-- Automatic target-role classification
-- Vector database integration
-- Recruiter-oriented analytics dashboard
-
----
-
-## Author
-
-**Subi Samayasundaram**
-
-B.Tech Artificial Intelligence and Machine Learning  
-St. Joseph's College of Engineering
-
-Areas of interest include Generative AI, Natural Language Processing, Large Language Models, Machine Learning, and intelligent AI systems.
-
----
-
 ## License
 
 This project is licensed under the MIT License.
