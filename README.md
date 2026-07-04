@@ -1,90 +1,221 @@
-PrepGenius
-AI Resume Intelligence Suite
+# PrepGenius
 
-Overview
-PrepGenius is an AI-powered resume intelligence platform designed to evaluate resume–job alignment, detect technical skill gaps, and generate role-specific optimization feedback using NLP, semantic similarity, and GPT-based analysis.
-It combines keyword-based similarity scoring with BERT-based semantic matching (via sentence-transformers) to capture not just exact keyword overlap but paraphrased and conceptually related skills, helping candidates tailor their resumes for specific job descriptions with greater accuracy.
+## AI Resume Intelligence Suite
 
-Core Capabilities
-1. Resume–Job Match Analysis
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Streamlit](https://img.shields.io/badge/Built%20With-Streamlit-red)
+![Domain](https://img.shields.io/badge/Domain-NLP-green)
+![Semantic Matching](https://img.shields.io/badge/Semantic%20Matching-Sentence%20Transformers-orange)
+![LLM](https://img.shields.io/badge/LLM-Groq%20%7C%20Ollama-purple)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-* Cosine similarity scoring using vectorized text
-* Keyword overlap detection
-* Match percentage with visual indicators
+---
 
-1b. Semantic Match Analysis (BERT-based)
+## Overview
 
-* Upgrades keyword-based cosine similarity with BERT sentence embeddings (sentence-transformers, MiniLM)
-* Captures paraphrased skills that exact keyword matching misses (e.g. "built REST APIs" vs "developed backend services")
-* Requirement-level breakdown: each job requirement is matched against its closest resume line, with a similarity score
-* Automatically flags weak semantic matches (score < 0.30) as likely skill gaps
-* Result on real resume/JD test: improved match detection by 18+ points (32.55% keyword → 50.9% semantic)
+PrepGenius is an AI-powered resume intelligence platform designed to evaluate resume–job alignment, identify technical skill gaps, and generate role-specific resume optimization feedback using Natural Language Processing and semantic similarity analysis.
 
-2. Skill Gap Detection
+The platform combines traditional keyword-based similarity scoring with transformer-based semantic matching to identify both direct keyword overlap and conceptually related experience.
 
-* Identifies missing technical keywords
-* Displays matching vs missing terms
-* Highlights resume alignment strength
+By integrating Sentence-Transformer embeddings and Large Language Model-based analysis, PrepGenius provides a comprehensive assessment of resume relevance for a target job description.
 
-3. AI Resume Optimization
+---
 
-* Role-specific missing skill recommendations
-* Resume bullet rewriting aligned to job description
-* Professional summary refinement
-* Achievement quantification suggestions
-* ATS keyword optimization improvements
-* Pluggable LLM backend: supports both cloud (OpenAI GPT-4o-mini) and local (Ollama) inference, allowing cost-free offline operation as a fallback
+## Core Capabilities
 
-4. Flexible Input Support
+### 1. Resume–Job Match Analysis
 
-* Upload PDF resumes
-* Upload DOCX resumes
-* Manual text input
+- Cosine similarity scoring using vectorized text
+- Keyword overlap analysis
+- Resume–job alignment percentage
+- Visual representation of match strength
 
-System Architecture
-User Input (PDF/DOCX/Text) → Text Extraction → Text Normalization → Vectorization (CountVectorizer) → Cosine Similarity Scoring → Semantic Embedding Matching (BERT) → Keyword Gap Detection → Semantic Gap Detection → GPT/Ollama-Based Optimization Feedback
+### 2. Semantic Match Analysis
 
-Technology Stack
+- Sentence embedding generation using Sentence-Transformers
+- MiniLM-based semantic similarity analysis
+- Requirement-level resume matching
+- Detection of paraphrased and conceptually related experience
+- Automatic identification of weak semantic matches
 
-* Python
-* Streamlit
-* Scikit-learn
-* PyPDF2
-* python-docx
-* OpenAI API
-* Sentence-Transformers (BERT/MiniLM embeddings)
-* Ollama (optional local LLM backend)
+Each job requirement is compared with the most relevant resume statement and assigned a semantic similarity score.
 
-Installation
+Matches below a defined similarity threshold are identified as potential skill gaps.
+
+### 3. Skill Gap Detection
+
+- Identifies missing technical keywords
+- Detects weak semantic alignment
+- Separates matched and missing requirements
+- Evaluates overall resume alignment strength
+
+The system combines keyword-based and semantic gap detection to provide a more comprehensive analysis of resume–job alignment.
+
+### 4. AI Resume Optimization
+
+- Role-specific skill recommendations
+- Resume bullet-point refinement
+- Professional summary enhancement
+- Achievement quantification suggestions
+- ATS-oriented keyword optimization
+
+Large Language Models are used to generate contextual optimization recommendations based on the candidate's resume and target job description.
+
+### 5. Flexible LLM Backend
+
+PrepGenius supports cloud-based and local Large Language Model inference.
+
+- Groq API for cloud-based LLM inference
+- Ollama for local LLM inference
+- Local processing support
+- Flexible LLM backend selection
+
+The pluggable LLM architecture allows the application to use local inference as an alternative to cloud-based APIs.
+
+### 6. Flexible Input Support
+
+- PDF resume upload
+- DOCX resume upload
+- Manual text input
+
+Uploaded documents are processed through a text extraction and normalization pipeline before analysis.
+
+---
+
+## Semantic Matching Evaluation
+
+The semantic matching module improves resume–job alignment detection by identifying contextual relationships that traditional keyword matching may fail to capture.
+
+| Matching Method | Match Score |
+|---|---:|
+| Keyword-Based Similarity | 32.55% |
+| Semantic Similarity | 50.9% |
+| Improvement | 18+ percentage points |
+
+For example:
+
+> **Resume:** Built REST APIs for an AI application.
+
+> **Job Requirement:** Experience developing backend services.
+
+Although the statements contain limited direct keyword overlap, semantic matching identifies their conceptual relationship.
+
+---
+
+## System Architecture
+
+```text
+User Input (PDF / DOCX / Text)
+              |
+              v
+       Text Extraction
+              |
+              v
+      Text Normalization
+              |
+              v
+      Keyword Vectorization
+       (CountVectorizer)
+              |
+              v
+   Cosine Similarity Analysis
+              |
+              v
+ Semantic Embedding Generation
+   (Sentence-Transformers)
+              |
+              v
+ Requirement-Level Matching
+              |
+       +------+------+
+       |             |
+       v             v
+ Keyword Gap    Semantic Gap
+   Detection      Detection
+       |             |
+       +------+------+
+              |
+              v
+    Hybrid Skill Gap Analysis
+              |
+              v
+     LLM-Based Optimization
+              |
+       +------+------+
+       |             |
+       v             v
+    Groq API       Ollama
+              |
+              v
+ Resume Intelligence Dashboard
+```
+
+---
+
+## Technology Stack
+
+- Python
+- Streamlit
+- Scikit-learn
+- Sentence-Transformers
+- MiniLM
+- PyPDF2
+- python-docx
+- Groq API
+- Ollama
+
+---
+
+## Installation
+
 Clone the repository:
 
-```
+```bash
 git clone https://github.com/SubiSamayasundaram/PrepGenius.git
 cd PrepGenius
 ```
 
-Install dependencies:
+Install the required dependencies:
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
-Set up your OpenAI API key (only needed if using the OpenAI backend):
+Run the application:
 
-```
-mkdir .streamlit
-echo OPENAI_API_KEY = "your-key-here" > .streamlit/secrets.toml
-```
-
-Or, to use the local Ollama backend instead (no API key required):
-
-```
-ollama pull llama3
-ollama serve
-```
-
-Run the app:
-
-```
+```bash
 streamlit run app.py
 ```
+
+> LLM-based resume optimization supports Groq API and Ollama backends. Configure the preferred backend before using AI optimization features.
+
+---
+
+## Future Enhancements
+
+- Weighted hybrid lexical and semantic scoring
+- Named Entity Recognition for structured skill extraction
+- Resume section-level analysis
+- Experience relevance scoring
+- Advanced ATS compatibility analysis
+- Multi-job description comparison
+- Automatic target-role classification
+- Vector database integration
+- Recruiter-oriented analytics dashboard
+
+---
+
+## Author
+
+**Subi Samayasundaram**
+
+B.Tech Artificial Intelligence and Machine Learning  
+St. Joseph's College of Engineering
+
+Areas of interest include Generative AI, Natural Language Processing, Large Language Models, Machine Learning, and intelligent AI systems.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
