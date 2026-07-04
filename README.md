@@ -1,57 +1,96 @@
-# PrepGenius
+<div align="center">
 
-## AI Resume Intelligence Suite
+# 🚀 PrepGenius
+
+### AI Resume Intelligence Suite
+
+**Analyze Resume–Job Alignment • Detect Skill Gaps • Optimize with AI**
+
+<br>
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Streamlit](https://img.shields.io/badge/Built%20With-Streamlit-red)
-![Domain](https://img.shields.io/badge/Domain-NLP-green)
-![Semantic Matching](https://img.shields.io/badge/Semantic%20Matching-Sentence%20Transformers-orange)
+![NLP](https://img.shields.io/badge/Domain-NLP-green)
+![Semantic AI](https://img.shields.io/badge/Semantic%20AI-MiniLM-orange)
 ![LLM](https://img.shields.io/badge/LLM-Groq%20%7C%20Ollama-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
----
+<br>
 
-## Overview
+> **A hybrid NLP and semantic intelligence platform designed to evaluate resume relevance beyond traditional keyword matching.**
 
-PrepGenius is an AI-powered resume intelligence platform designed to evaluate resume–job alignment, identify technical skill gaps, and generate role-specific resume optimization feedback using Natural Language Processing and semantic similarity analysis.
-
-The platform combines traditional keyword-based similarity scoring with transformer-based semantic matching to identify both direct keyword overlap and conceptually related experience.
-
-By integrating Sentence-Transformer embeddings and Large Language Model-based analysis, PrepGenius provides a comprehensive assessment of resume relevance for a target job description.
+</div>
 
 ---
 
-## Core Capabilities
+## 📌 Overview
 
-### 1. Resume–Job Match Analysis
+**PrepGenius** is an AI-powered resume intelligence platform designed to evaluate **resume–job alignment**, identify **technical skill gaps**, and generate **role-specific resume optimization feedback**.
+
+The platform combines traditional keyword-based similarity analysis with transformer-based semantic matching to identify both direct keyword overlap and conceptually related experience.
+
+By integrating **Sentence-Transformer embeddings**, **MiniLM-based semantic similarity**, and **Large Language Models**, PrepGenius provides a comprehensive assessment of resume relevance for a target job description.
+
+---
+
+## 💡 What Makes PrepGenius Different?
+
+Traditional resume matching systems primarily depend on exact keyword overlap.
+
+PrepGenius combines:
+
+| Approach | Purpose |
+|---|---|
+| 🔍 Keyword Matching | Identifies direct terminology overlap |
+| 🧠 Semantic Matching | Detects conceptually related experience |
+| 📊 Skill Gap Analysis | Identifies weak or missing requirements |
+| 🤖 LLM Optimization | Generates contextual resume improvements |
+
+### Example
+
+> **Resume:** Built REST APIs for an AI application.
+
+> **Job Requirement:** Experience developing backend services.
+
+A traditional keyword matcher may identify limited overlap.
+
+**PrepGenius uses semantic embeddings to recognize the conceptual relationship between both statements.**
+
+---
+
+## 🧠 Core Capabilities
+
+### 📊 1. Resume–Job Match Analysis
 
 - Cosine similarity scoring using vectorized text
 - Keyword overlap analysis
 - Resume–job alignment percentage
 - Visual representation of match strength
 
-### 2. Semantic Match Analysis
+### 🔗 2. Semantic Match Analysis
 
 - Sentence embedding generation using Sentence-Transformers
 - MiniLM-based semantic similarity analysis
 - Requirement-level resume matching
-- Detection of paraphrased and conceptually related experience
-- Automatic identification of weak semantic matches
+- Detection of paraphrased experience
+- Identification of conceptually related technical skills
+- Automatic detection of weak semantic matches
 
 Each job requirement is compared with the most relevant resume statement and assigned a semantic similarity score.
 
-Matches below a defined similarity threshold are identified as potential skill gaps.
+Matches below the defined similarity threshold are identified as potential skill gaps.
 
-### 3. Skill Gap Detection
+### 🎯 3. Skill Gap Detection
 
 - Identifies missing technical keywords
 - Detects weak semantic alignment
 - Separates matched and missing requirements
-- Evaluates overall resume alignment strength
+- Evaluates resume alignment strength
+- Highlights potential technical skill gaps
 
-The system combines keyword-based and semantic gap detection to provide a more comprehensive analysis of resume–job alignment.
+The system combines **keyword-based gap detection** and **semantic gap detection** to provide a more comprehensive assessment of resume–job alignment.
 
-### 4. AI Resume Optimization
+### 🤖 4. AI Resume Optimization
 
 - Role-specific skill recommendations
 - Resume bullet-point refinement
@@ -61,112 +100,91 @@ The system combines keyword-based and semantic gap detection to provide a more c
 
 Large Language Models are used to generate contextual optimization recommendations based on the candidate's resume and target job description.
 
-### 5. Flexible LLM Backend
+### ⚡ 5. Flexible LLM Backend
 
-PrepGenius supports cloud-based and local Large Language Model inference.
+PrepGenius supports both cloud-based and local Large Language Model inference.
 
-- Groq API for cloud-based LLM inference
-- Ollama for local LLM inference
-- Local processing support
-- Flexible LLM backend selection
+- ⚡ **Groq API** — Cloud-based LLM inference
+- 🖥️ **Ollama** — Local LLM inference
+- 🔄 Flexible backend selection
+- 🔐 Local processing support
 
-The pluggable LLM architecture allows the application to use local inference as an alternative to cloud-based APIs.
+The pluggable LLM architecture allows local inference to be used as an alternative to cloud-based APIs.
 
-### 6. Flexible Input Support
-
-- PDF resume upload
-- DOCX resume upload
-- Manual text input
-
-Uploaded documents are processed through a text extraction and normalization pipeline before analysis.
-
----
-
-## Semantic Matching Evaluation
+## 📈 Semantic Matching Evaluation
 
 The semantic matching module improves resume–job alignment detection by identifying contextual relationships that traditional keyword matching may fail to capture.
 
 | Matching Method | Match Score |
 |---|---:|
-| Keyword-Based Similarity | 32.55% |
-| Semantic Similarity | 50.9% |
-| Improvement | 18+ percentage points |
+| 🔍 Keyword-Based Similarity | 32.55% |
+| 🧠 Semantic Similarity | **50.9%** |
+| 📈 Improvement | **18+ percentage points** |
 
-For example:
-
-> **Resume:** Built REST APIs for an AI application.
-
-> **Job Requirement:** Experience developing backend services.
-
-Although the statements contain limited direct keyword overlap, semantic matching identifies their conceptual relationship.
+> Semantic matching identified relevant resume experience that was not captured through direct keyword comparison.
 
 ---
 
-## System Architecture
+## 🏗️ System Architecture
 
 ```text
-User Input (PDF / DOCX / Text)
-              |
-              v
-       Text Extraction
-              |
-              v
-      Text Normalization
-              |
-              v
-      Keyword Vectorization
-       (CountVectorizer)
-              |
-              v
-   Cosine Similarity Analysis
-              |
-              v
- Semantic Embedding Generation
-   (Sentence-Transformers)
-              |
-              v
- Requirement-Level Matching
-              |
-       +------+------+
-       |             |
-       v             v
- Keyword Gap    Semantic Gap
-   Detection      Detection
-       |             |
-       +------+------+
-              |
-              v
-    Hybrid Skill Gap Analysis
-              |
-              v
-     LLM-Based Optimization
-              |
-       +------+------+
-       |             |
-       v             v
-    Groq API       Ollama
-              |
-              v
- Resume Intelligence Dashboard
+Resume / Job Description
+          │
+          ▼
+    Text Extraction
+          │
+          ▼
+   Text Normalization
+          │
+          ▼
+  ┌───────┴────────┐
+  │                │
+  ▼                ▼
+Keyword         Semantic
+Matching        Matching
+  │                │
+  ▼                ▼
+Cosine          MiniLM
+Similarity      Embeddings
+  │                │
+  └───────┬────────┘
+          │
+          ▼
+ Hybrid Gap Detection
+          │
+          ▼
+  LLM Optimization
+          │
+    ┌─────┴─────┐
+    │           │
+    ▼           ▼
+ Groq API     Ollama
+    │           │
+    └─────┬─────┘
+          │
+          ▼
+Resume Intelligence Dashboard
 ```
 
 ---
 
-## Technology Stack
+## 🛠️ Technology Stack
 
-- Python
-- Streamlit
-- Scikit-learn
-- Sentence-Transformers
-- MiniLM
-- PyPDF2
-- python-docx
-- Groq API
-- Ollama
+| Technology | Purpose |
+|---|---|
+|  Python | Core application development |
+|  Streamlit | Interactive web interface |
+|  Scikit-learn | Vectorization and cosine similarity |
+|  Sentence-Transformers | Semantic embedding generation |
+|  MiniLM | Transformer-based sentence representation |
+|  PyPDF2 | PDF text extraction |
+|  python-docx | DOCX document processing |
+|  Groq API | Cloud-based LLM inference |
+|  Ollama | Local LLM inference |
 
 ---
 
-## Installation
+## 🚀 Installation
 
 Clone the repository:
 
@@ -187,10 +205,13 @@ Run the application:
 streamlit run app.py
 ```
 
-> LLM-based resume optimization supports Groq API and Ollama backends. Configure the preferred backend before using AI optimization features.
+> **Note:** LLM-based resume optimization supports Groq API and Ollama backends. Configure the preferred backend before using AI optimization features.
 
 ---
 
-## License
 
-This project is licensed under the MIT License.
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
