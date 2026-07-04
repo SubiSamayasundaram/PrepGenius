@@ -107,8 +107,31 @@ def extract_skills(text):
     return set(found)
 
 
-def generate_ai_feedback(resume_text, jd_text, score, semantic_score=None, semantic_gaps=None):
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+def generate_ai_feedback(resume_text, jd_text, score, semantic_score=None, semantic_gaps=None, backend="Ollama (local)", ollama_model="llama3.2", groq_model="llama-3.1-8b-instant"):
+    if backend == "Groq (cloud)":
+        # Groq exposes an OpenAI-compatible endpoint, so we reuse the same
+        # client -- just point it at Groq's server with a Groq API key.
+        # Free key from https://console.groq.com/keys
+        try:
+            groq_key = st.secrets["GROQ_API_KEY"]
+        except Exception:
+            raise RuntimeError(
+                "GROQ_API_KEY not found. Add it to .streamlit/secrets.toml as: "
+                'GROQ_API_KEY = "your-key-here"'
+            )
+        client = OpenAI(
+            base_url="https://api.groq.com/openai/v1",
+            api_key=groq_key
+        )
+        model_name = groq_model
+    else:
+        # Ollama exposes an OpenAI-compatible endpoint locally, so we reuse
+        # the same client -- just point it at localhost, no API key needed.
+        client = OpenAI(
+            base_url="http://localhost:11434/v1",
+            api_key="ollama"  # required by the client library, but unused by Ollama
+        )
+        model_name = ollama_model
 
     tone_instruction = """
 If alignment is low, be encouraging and constructive.
@@ -147,7 +170,7 @@ Be specific, analytical, and professional.
 """
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=model_name,
         messages=[{"role": "user", "content": prompt}],
         temperature=0.4
     )
@@ -297,16 +320,50 @@ if "analysis" in st.session_state:
 
     st.markdown("## AI Insight")
 
+    backend_choice = st.radio(
+        "Choose feedback engine",
+        ["Ollama (local)", "Groq (cloud)"],
+        horizontal=True,
+        key="backend_choice",
+        help="Ollama runs free on your machine but won't work once this app is deployed online. Groq is a free cloud API that works both locally and when deployed."
+    )
+
+    ollama_model = "llama3.2"
+    groq_model = "llama-3.1-8b-instant"
+
+    if backend_choice == "Ollama (local)":
+        ollama_model = st.text_input(
+            "Ollama model name",
+            value="llama3.2",
+            help="Must match a model you've already pulled, e.g. run 'ollama list' to check."
+        )
+    else:
+        groq_model = st.text_input(
+            "Groq model name",
+            value="llama-3.1-8b-instant",
+            help="Free key from https://console.groq.com/keys — add it to .streamlit/secrets.toml as GROQ_API_KEY."
+        )
+
     if st.button("Generate Detailed Feedback"):
-        with st.spinner("Analyzing alignment..."):
-            feedback = generate_ai_feedback(
-                a["resume_text"],
-                a["job_description"],
-                score,
-                semantic_score=semantic_score,
-                semantic_gaps=semantic_gaps
-            )
-            st.session_state["feedback"] = feedback
+        with st.spinner(f"Analyzing alignment using {backend_choice}..."):
+            try:
+                feedback = generate_ai_feedback(
+                    a["resume_text"],
+                    a["job_description"],
+                    score,
+                    semantic_score=semantic_score,
+                    semantic_gaps=semantic_gaps,
+                    backend=backend_choice,
+                    ollama_model=ollama_model,
+                    groq_model=groq_model
+                )
+                st.session_state["feedback"] = feedback
+            except Exception as e:
+                st.error(f"Feedback generation failed: {e}")
+                if backend_choice == "Ollama (local)":
+                    st.info("Make sure Ollama is running ('ollama serve') and the model name matches 'ollama list'.")
+                else:
+                    st.info("Check that GROQ_API_KEY is set correctly in .streamlit/secrets.toml.")
 
     if "feedback" in st.session_state:
         st.markdown(st.session_state["feedback"])
